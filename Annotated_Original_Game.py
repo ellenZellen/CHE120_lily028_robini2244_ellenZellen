@@ -1,7 +1,6 @@
 # Sonar Treasure Hunt 
 
-#Lines 4-__ annotated by LY 
-
+#Lines 4-84 annotated by LY 
 import random
 #random is needed to generate random numbers to create the ocean wave pattern, and decide where the treasure chests are hidden on the board.
 import sys
