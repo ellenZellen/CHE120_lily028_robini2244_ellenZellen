@@ -79,4 +79,4 @@ def getRandomChests(numChests): #This function is to randomly generate the posit
         if newChest not in chests: # Makes sure a chest is not already in the chosen coordinates
             #modifies the original chest list to add the new chest coordinate
             chests.append(newChest)
-    return chests 7
+    return chests
