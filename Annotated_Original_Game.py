@@ -130,6 +130,8 @@ def enterPlayerMove(previousMoves):
 
         print('Enter a number from 0 to 59, a space, then a number from 0 to 14.')
 
+#define a function to display the game rules and examples to the player
+#this is a separated into a function so the main game flow stays clean and readable, and instructions are only shown if the user requests them
 def showInstructions():
     print('''Instructions:
 You are the captain of the Simon, a treasure-hunting ship. Your current mission
