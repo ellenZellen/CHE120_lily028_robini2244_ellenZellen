@@ -83,6 +83,8 @@ def getRandomChests(numChests):#This function is to randomly generate the positi
             chests.append(newChest)
     return chests
 
+
+#line 88-133 annotated by RI
 def isOnBoard(x, y):
     # Return True if the coordinates are on the board; otherwise, return False.
     return x >= 0 and x <= 59 and y >= 0 and y <= 14
@@ -130,6 +132,8 @@ def enterPlayerMove(previousMoves):
 
         print('Enter a number from 0 to 59, a space, then a number from 0 to 14.')
 
+
+#line 139-263 annotated by EZ
 #define a function to display the game rules and examples to the player
 #this is a separated into a function so the main game flow stays clean and readable, and instructions are only shown if the user requests them
 def showInstructions():
