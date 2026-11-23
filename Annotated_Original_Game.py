@@ -157,8 +157,11 @@ range. For example, the C marks are where chests are. The sonar device shows a
 (In the real game, the chests are not visible in the ocean.)
 
 Press enter to continue...''')
+#pause program execution using input() without storing the return value in order to prevent the second half of the instructions from scrolling past too quickly.
+#so basically it gives the player time to read the first screen.
     input()
-
+#the  print the second part of the instructions explaining what happens when a chest is found 
+#other sonar readings update to point to the closest chest and the max sonar range (9 spaces)
     print('''When you drop a sonar device directly on a chest, you retrieve it and the other
 sonar devices update to show how far away the next nearest chest is. The chests
 are beyond the range of the sonar device on the left, so it shows an X.
@@ -180,55 +183,77 @@ up to a distance of 9 spaces. Try to collect all 3 chests before running out of
 sonar devices. Good luck!
 
 Press enter to continue...''')
+#here pause again so the player can finish reading before the actual game board is drawn
     input()
 
 
-
+#print the main title banner and a blank line for visual seperation when program starts
 print('S O N A R !')
 print()
+#ask the player if they want to read the rules before starting
 print('Would you like to view the instructions? (yes/no)')
+#convert the input to lowercase and check if it starts with 'y'(ie. yes, Yes, Y...)
+#to make sure user input flexible and prevent accidential skips due to capitalization
 if input().lower().startswith('y'):
     showInstructions()
 
+#main outer game loop: keeps restarting new rounds until the player explicitly choose to quit
 while True:
     # Game setup
+#reset all variables for a fresh round, give the player 20 turns to find 3 randomly placed chests
     sonarDevices = 20
     theBoard = getNewBoard()
+#generate a clean 60x15 grid data structure
     theChests = getRandomChests(3)
+#generate 3 unique (x,y) coordinates for hidden treasure chests
     drawBoard(theBoard)
+#render the initial empty board to the console
     previousMoves = []
+#initialize an empty list to record all valid (x,y) moves made by the player
 
+#inner turn loop: runs as long as the player still has sonar devices(turns) remaining 
     while sonarDevices > 0:
         # Show sonar device and chest statuses.
+#diplay current status so the player knows how many attempts and chests are left
+#uses string formatting (%s) to dynamically insert the integer count and list length
         print('You have %s sonar device(s) left. %s treasure chest(s) remaining.' % (sonarDevices, len(theChests)))
-
+#prompt the player for valid (x,y) coordinates that have not been guessed yet
         x, y = enterPlayerMove(previousMoves)
+#record the new move in previousMoves because when a chest is found and removed, we must recalculate and update the distance numbers for all previously dropped sonar devices on the board
         previousMoves.append([x, y]) # We must track all moves so that sonar devices can be updated.
-
+#place the sonar on the board, calculate distance to the nearest chest, and get the status message
         moveResult = makeMove(theBoard, theChests, x, y)
         if moveResult == False:
             continue
         else:
+#then check if the player landed directly on a chest which removes that chest from theChests
             if moveResult == 'You have found a sunken treasure chest!':
                 # Update all the sonar devices currently on the map.
+#rerun makeMove for every past coordinate in previousMoves since one chest was just collected, all exixsting sonar markers on the map are now outdated and must be updated to show distances to the remaining chests
                 for x, y in previousMoves:
                     makeMove(theBoard, theChests, x, y)
+#redraw the updated map and print the result of the player's lastest move
             drawBoard(theBoard)
             print(moveResult)
-
+#check if all chests have been removed from theChests list. If so, the player wins.
         if len(theChests) == 0:
             print('You have found all the sunken treasure chests! Congratulations and good game!')
+#exist the inner turn loop immediately since the game is won
             break
-
+#decrement the remaining sonar device count by 1 after a valid turn
         sonarDevices -= 1
 
+#loss condition check: if the inner loop ended because sonarDevices reached 0 and not through 'break', let the player know they lost and reveal the coordinates of any undound chests
     if sonarDevices == 0:
         print('We\'ve run out of sonar devices! Now we have to turn the ship around and head')
         print('for home with treasure chests still out there! Game over.')
         print(' The remaining chests were here:')
+#loop through the remaining (x,y) pairs in theChests and print their exact locations
         for x, y in theChests:
             print(' %s, %s' % (x, y))
 
+#ask if the player wants to play another round after winning or losing
     print('Do you want to play again? (yes or no)')
+#if the response does not start with 'y' or 'Y', terminiate the program.
     if not input().lower().startswith('y'):
         sys.exit()
